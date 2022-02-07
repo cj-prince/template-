@@ -13,9 +13,9 @@ const Template = ({job,name,text,info,id}) => {
             <p>{info}</p>
         </div>
         <div className='template-footer'>
-            <h4 onClick={(e)=>this.setState({job})}>
+            <a onClick={(e)=>this.setState({job})}>
                 Use Template
-            </h4>
+            </a>
         </div>
         </article>
     )

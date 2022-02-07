@@ -1,33 +1,46 @@
-import React, {useRef,useEffect} from 'react'
+import React, {useState} from 'react'
 import { useGlobalContext } from '../context'
 import imgSearch from '../search.svg'
 
-const SearchForm = () => {
-    const {setSearchTerm}= useGlobalContext()
-    const searchValue = useRef()
-    const searchTemplate = ()=>{
-        setSearchTerm(searchValue.current.value)
-    }
-    useEffect(() => {
-        searchValue.current.focus()
-    },[])
+const SearchForm = ({ placeholder, data }) => {
+    const {setTemplate}= useGlobalContext([])
+    const [searchTerm, setSearchTerm] = useState("")
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-    }
+    const handleFilter = (event) => {
+        const searchWord = event.target.value;
+        setSearchTerm(searchWord);
+        const newFilter = data.filter((value) => {
+        return value.name.toLowerCase().includes(searchWord.toLowerCase());
+        });
+
+        if (searchWord === "") {
+        setTemplate([]);
+        } else {
+        setTemplate(newFilter);
+        }
+    };
+
+    const clearInput = () => {
+        setTemplate([]);
+        setSearchTerm("");
+    };
+
     return (
-        <section className=' search'>
-        <form className='search-form' onSubmit={handleSubmit}>
-            <div className='form-control'>
-                <input type="text" id='id' ref={searchValue} 
-                onChange={searchTemplate} placeholder="Search Template" />
-                <img src={imgSearch} alt="" />
+        <div className="search">
+            <div className="search-form">
+                <input
+                type="text"
+                placeholder={placeholder}
+                value={searchTerm}
+                onChange={handleFilter}
+                className='form-control'
+                />
+                <div className="searchIcon">
+                    <img src={imgSearch} alt="" />
+                </div>
             </div>
-            
-        </form>
-        
-        </section>
-    )
+        </div>
+    );
 }
 
 export default SearchForm

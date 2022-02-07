@@ -6,12 +6,11 @@ const AppContext = React.createContext()
 
 
 const AppProvider = ({ children }) => {
-    const [searchTerm, setSearchTerm]= useState('')
     const [template, setTemplate]= useState([])
 
     const fetchTemplate = useCallback (async () =>{
         try {
-        const response = await fetch(`${url}${searchTerm}`)
+        const response = await fetch(`${url}`)
         const data = await response.json()
         
         if (data){
@@ -25,18 +24,18 @@ const AppProvider = ({ children }) => {
         }
         } catch (error) {
         }
-    },[searchTerm])
+    },[])
     useEffect(()=>{
         fetchTemplate()
-    },[searchTerm,fetchTemplate])
+    },[fetchTemplate])
 
     return <AppContext.Provider 
             value={{
-            setSearchTerm,template,setTemplate}}>
+            template,setTemplate}}>
             {children}
         </AppContext.Provider>
 }
-// make sure use
+
 export const useGlobalContext = () => {
     return useContext(AppContext)
 }
